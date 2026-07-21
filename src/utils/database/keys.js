@@ -128,7 +128,7 @@ export function getWelcomeConfigKey(guildId) {
  * Legacy key patterns mapped to canonical builders.
  * Used by migration script and read-time fallback.
  */
-export const LEGACY_KEY_RESOLVERS = [
+ const LEGACY_KEY_RESOLVERS = [
     {
         pattern: /^economy:([^:]+):([^:]+)$/,
         toCanonical: ([, guildId, userId]) => getEconomyKey(guildId, userId),
