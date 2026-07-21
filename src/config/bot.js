@@ -138,7 +138,7 @@ export const botConfig = {
   high: "#f1c40f",
   urgent: "#e74c3c",
 },
-
+      
       // Optional default embed author block.
       name: null,
       icon: null,
@@ -153,7 +153,7 @@ export const botConfig = {
 
     ownersOnly: true,
 
-    logChannel: null,
+    logChannel: 1528690403367452732,
 
     banMessage:
       "You have been permanently banned from this server.",
