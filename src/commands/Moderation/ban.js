@@ -1,67 +1,36 @@
-import { SlashCommandBuilder, PermissionFlagsBits } from 'discord.js';
-import { successEmbed } from '../../utils/embeds.js';
-import { InteractionHelper } from '../../utils/interactionHelper.js';
-import { ModerationService } from '../../services/moderation/moderationService.js';
-import { TitanBotError, ErrorTypes } from '../../utils/errorHandler.js';
+import { SlashCommandBuilder, PermissionFlagsBits } from "discord.js";
 
 export default {
     data: new SlashCommandBuilder()
-        .setName("ban")
-        .setDescription("Ban a user from the server")
-        .addUserOption((option) =>
+        .setName("foreverban")
+        .setDescription("Permanently bans a user.")
+        .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers)
+        .addUserOption(option =>
             option
-                .setName("target")
-                .setDescription("The user to ban")
-                .setRequired(true),
+                .setName("user")
+                .setDescription("User to forever ban")
+                .setRequired(true)
         )
-        .addStringOption((option) =>
-            option.setName("reason").setDescription("Reason for the ban"),
-        )
-        .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers),
-    category: "moderation",
+        .addStringOption(option =>
+            option
+                .setName("reason")
+                .setDescription("Reason for the ban")
+                .setRequired(false)
+        ),
 
-    async execute(interaction, config, client) {
-        const user = interaction.options.getUser("target");
+    async execute(interaction) {
+
+        const user = interaction.options.getUser("user");
         const reason = interaction.options.getString("reason") || "No reason provided";
 
-        if (!user) {
-            throw new TitanBotError(
-                'Missing target user',
-                ErrorTypes.USER_INPUT,
-                'You must specify a user to ban.',
-                { subtype: 'invalid_user' },
-            );
-        }
+        const member = await interaction.guild.members.fetch(user.id);
 
-        if (user.id === interaction.user.id) {
-            throw new TitanBotError(
-                'Cannot ban self',
-                ErrorTypes.VALIDATION,
-                'You cannot ban yourself.',
-            );
-        }
-        if (user.id === client.user.id) {
-            throw new TitanBotError(
-                'Cannot ban bot',
-                ErrorTypes.VALIDATION,
-                'You cannot ban the bot.',
-            );
-        }
-
-        const result = await ModerationService.banUser({
-            guild: interaction.guild,
-            user,
-            moderator: interaction.member,
-            reason,
+        await member.ban({
+            reason: `Forever ban: ${reason}`
         });
 
-        await InteractionHelper.universalReply(interaction, {
-            embeds: [
-                successEmbed(
-                    `🚫 **👍** ${user.tag}`,
-                    `**Reason:** ${reason}\n**Case ID:** #${result.caseId}`,
-                ),
-            ],
+        await interaction.reply({
+            content: `✅ ${user.tag} has been permanently banned.\nReason: ${reason}`
         });
-    },
+    }
 };
