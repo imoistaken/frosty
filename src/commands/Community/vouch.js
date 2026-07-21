@@ -22,7 +22,7 @@ export default {
         const user = interaction.options.getUser("user");
         const member = await interaction.guild.members.fetch(user.id);
 
-        if (member.roles.cache.has("1529257093234692096")) {
+        if (member.roles.cache.has("1528690394727055441")) {
             return InteractionHelper.universalReply(interaction, {
                 content: "❌ This user already has the vouch role.",
                 ephemeral: true,
