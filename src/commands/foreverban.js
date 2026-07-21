@@ -1,5 +1,5 @@
 import { SlashCommandBuilder, PermissionFlagsBits } from "discord.js";
-import db from "../../database/database.js"; // change this path if your database file is somewhere else
+import { getForeverBanKey, setInDb } from "../../database.js";
 
 export default {
     data: new SlashCommandBuilder()
@@ -26,35 +26,35 @@ export default {
 
         try {
 
-            // Save forever ban to database
-            db.run(
-                `INSERT OR REPLACE INTO foreverbans (user_id, banned_by, reason)
-                 VALUES (?, ?, ?)`,
-                [
-                    user.id,
-                    interaction.user.id,
-                    reason
-                ]
+            // Save forever ban in database
+            await setInDb(
+                getForeverBanKey(user.id),
+                {
+                    userId: user.id,
+                    bannedBy: interaction.user.id,
+                    reason: reason,
+                    date: Date.now()
+                }
             );
 
-            // Ban user
+            // Ban the user
             await interaction.guild.members.ban(user.id, {
                 reason: `Forever ban: ${reason}`
             });
 
             await interaction.reply({
                 content:
-                    `✅ **${user.tag} has been forever banned.**\n` +
-                    `Reason: ${reason}\n` +
-                    `Banned by: ${interaction.user.tag}`
+                    `✅ **${user.tag} has been forever banned.**\n\n` +
+                    `**Reason:** ${reason}\n` +
+                    `**Banned by:** ${interaction.user.tag}`
             });
 
         } catch (error) {
 
-            console.error(error);
+            console.error("Forever ban error:", error);
 
             await interaction.reply({
-                content: "❌ Failed to forever ban this user.",
+                content: "❌ I could not forever ban this user.",
                 ephemeral: true
             });
 
