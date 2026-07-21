@@ -43,10 +43,9 @@ export default {
 
       await interaction.reply({
         content:
-          `🔨 **Forever Ban Applied**\n\n` +
-          `User: ${user.tag}\n` +
+          `👍 User:**has been permanently banned.
+They will be re-banned automatically if ever unbanned.**\n\n` +
           `Reason: ${reason}\n\n` +
-          `This user has been permanently banned.`,
         ephemeral: true,
       });
 
