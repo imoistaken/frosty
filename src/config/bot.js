@@ -137,46 +137,39 @@ export const botConfig = {
         medium: "#2ecc71",
         high: "#f1c40f",
         urgent: "#e74c3c",
-      },
-    },
-    footer: {
-      // Default footer text used in bot embeds.
-      text: "Titan Bot",
-      // Footer icon URL (null = no icon).
-      icon: null,
-    },
-    // Default thumbnail URL for embeds (null = no thumbnail).
-    thumbnail: null,
-    author: {
+         author: {
       // Optional default embed author block.
       name: null,
       icon: null,
       url: null,
     },
+  },
 
-  
-  // Stores users who are permanently banned.
-  // This will normally be stored in your database.
-  bannedUsers: [],
-},
+  // =========================
+  // FOREVER BAN SYSTEM
+  // =========================
+  foreverBan: {
+    enabled: true,
 
+    ownersOnly: true,
+
+    logChannel: null,
+
+    banMessage:
+      "You have been permanently banned from this server.",
+
+    commands: {
+      foreverBan: true,
+      unForeverBan: true,
+    },
+
+    bannedUsers: [],
   },
 
   // =========================
   // ECONOMY SETTINGS
   // =========================
   economy: {
-    currency: {
-      // Currency display name.
-      name: "coins",
-      // Plural display name.
-      namePlural: "coins",
-      // Currency symbol shown in balances.
-      symbol: "$",
-    },
-
-    // Starting balance for new users.
-    startingBalance: 0,
 
     // Maximum bank amount before upgrades (if upgrades are used).
     baseBankCapacity: 100000,
