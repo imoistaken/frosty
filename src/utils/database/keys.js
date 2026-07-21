@@ -247,6 +247,9 @@ export function getLegacyVariantsForCanonical(canonicalKey) {
             variants.push(`bday-role-tracking-${trackingMatch[1]}`);
         }
     }
+    export function getForeverBanKey(userId) {
+    return `foreverban:${userId}`;
+}
 
     return variants;
 }
