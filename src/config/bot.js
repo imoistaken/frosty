@@ -145,28 +145,6 @@ export const botConfig = {
       url: null,
     },       //
 
-  },         //
-  
-  // =========================
-  // FOREVER BAN SYSTEM
-  // =========================
-  foreverBan: {
-    enabled: true,
-
-    ownersOnly: true,
-
-    logChannel: 1528690403367452732,
-
-    banMessage:
-      "You have been permanently banned from this server.",
-
-    commands: {
-      foreverBan: true,
-      unForeverBan: true,
-    },
-
-    bannedUsers: [],
-  },
 
   // =========================
   // ECONOMY SETTINGS
