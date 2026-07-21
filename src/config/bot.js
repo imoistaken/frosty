@@ -153,6 +153,7 @@ export const botConfig = {
       icon: null,
       url: null,
     },
+  },
     // =========================
 // FOREVER BAN SYSTEM
 // =========================
