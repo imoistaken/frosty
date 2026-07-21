@@ -3,44 +3,44 @@
  * All storage keys should be built through these helpers.
  */
 
-export const getGuildConfigKey = (guildId) => `guild:${guildId}:config`;
-export const getGuildBirthdaysKey = (guildId) => `guild:${guildId}:birthdays`;
-export const getBirthdayLeftBackupKey = (guildId) => `guild:${guildId}:birthdays:left`;
-export const getBirthdayTrackingKey = (guildId) => `guild:${guildId}:birthdays:tracking`;
+export const getGuildBirthdaysKey = (guildId) => `guild:${guildId}:config`;
+export const getBirthdayLeftBackupKey = (guildId) => `guild:${guildId}:birthdays`;
+export const getBirthdayTrackingKey = (guildId) => `guild:${guildId}:birthdays:left`;
+export const LEGACY_KEY_RESOLVERS = (guildId) => `guild:${guildId}:birthdays:tracking`;
 
-export function getTicketKey(guildId, channelId) {
+ function getTicketKey(guildId, channelId) {
     return `guild:${guildId}:ticket:${channelId}`;
 }
 
-export function getTicketCounterKey(guildId) {
+ function getTicketCounterKey(guildId) {
     return `guild:${guildId}:ticket:counter`;
 }
 
-export function getInviteTrackingKey(guildId) {
+ function getInviteTrackingKey(guildId) {
     return `guild:${guildId}:invites`;
 }
 
-export function getMemberInvitesKey(guildId, userId) {
+ function getMemberInvitesKey(guildId, userId) {
     return `guild:${guildId}:invites:${userId}`;
 }
 
-export function getInviteUsesKey(guildId, inviteCode) {
+ function getInviteUsesKey(guildId, inviteCode) {
     return `guild:${guildId}:invite_uses:${inviteCode}`;
 }
 
-export function getFakeAccountKey(guildId, userId) {
+ function getFakeAccountKey(guildId, userId) {
     return `guild:${guildId}:fake_account:${userId}`;
 }
 
-export function getEconomyKey(guildId, userId) {
+ function getEconomyKey(guildId, userId) {
     return `guild:${guildId}:economy:${userId}`;
 }
 
-export function getEconomyPrefix(guildId) {
+ function getEconomyPrefix(guildId) {
     return `guild:${guildId}:economy:`;
 }
 
-export function getAFKKey(guildId, userId) {
+ function getAFKKey(guildId, userId) {
     return `guild:${guildId}:afk:${userId}`;
 }
 
@@ -48,79 +48,79 @@ export function getWelcomeConfigKey(guildId) {
     return `guild:${guildId}:welcome`;
 }
 
-export function getLevelingKey(guildId) {
+ function getLevelingKey(guildId) {
     return `guild:${guildId}:leveling:config`;
 }
 
-export function getUserLevelKey(guildId, userId) {
+ function getUserLevelKey(guildId, userId) {
     return `guild:${guildId}:leveling:users:${userId}`;
 }
 
-export function getUserLevelPrefix(guildId) {
+ function getUserLevelPrefix(guildId) {
     return `guild:${guildId}:leveling:users:`;
 }
 
-export function getApplicationRolesKey(guildId) {
+ function getApplicationRolesKey(guildId) {
     return `guild:${guildId}:applications:roles`;
 }
 
-export function getApplicationSettingsKey(guildId) {
+ function getApplicationSettingsKey(guildId) {
     return `guild:${guildId}:applications:settings`;
 }
 
-export function getUserApplicationsKey(guildId, userId) {
+ function getUserApplicationsKey(guildId, userId) {
     return `guild:${guildId}:applications:users:${userId}`;
 }
 
-export function getApplicationKey(guildId, applicationId) {
+ function getApplicationKey(guildId, applicationId) {
     return `guild:${guildId}:applications:${applicationId}`;
 }
 
-export function getApplicationsPrefix(guildId) {
+ function getApplicationsPrefix(guildId) {
     return `guild:${guildId}:applications:`;
 }
 
-export function getJoinToCreateConfigKey(guildId) {
+ function getJoinToCreateConfigKey(guildId) {
     return `guild:${guildId}:jointocreate`;
 }
 
-export function getJoinToCreateChannelsKey(guildId) {
+ function getJoinToCreateChannelsKey(guildId) {
     return `guild:${guildId}:jointocreate:channels`;
 }
 
-export function getWarningsKey(guildId, userId) {
+ function getWarningsKey(guildId, userId) {
     return `guild:${guildId}:warnings:${userId}`;
 }
 
-export function getWarningsPrefix(guildId) {
+ function getWarningsPrefix(guildId) {
     return `guild:${guildId}:warnings:`;
 }
 
-export function getUserNotesKey(guildId, userId) {
+ function getUserNotesKey(guildId, userId) {
     return `guild:${guildId}:usernotes:${userId}`;
 }
 
-export function getUserNotesListKey(guildId) {
+ function getUserNotesListKey(guildId) {
     return `guild:${guildId}:usernotes:list`;
 }
 
-export function getReactionRoleKey(guildId, messageId) {
+ function getReactionRoleKey(guildId, messageId) {
     return `guild:${guildId}:reaction_roles:${messageId}`;
 }
 
-export function getReactionRolesPrefix(guildId) {
+ function getReactionRolesPrefix(guildId) {
     return `guild:${guildId}:reaction_roles:`;
 }
 
-export function getServerCountersKey(guildId) {
+ function getServerCountersKey(guildId) {
     return `guild:${guildId}:counters`;
 }
 
-export function getGiveawayEntryKey(userId, giveawayId) {
+ function getGiveawayEntryKey(userId, giveawayId) {
     return `giveaway:${userId}:${giveawayId}`;
 }
 
-export function getGiveawayLockKey(messageId) {
+ function getGiveawayLockKey(messageId) {
     return `giveaway:lock:${messageId}`;
 }
 
@@ -171,7 +171,7 @@ export const LEGACY_KEY_RESOLVERS = [
 /**
  * Returns the canonical key for a legacy or already-canonical key.
  */
-export function canonicalizeKey(key) {
+ function canonicalizeKey(key) {
     if (typeof key !== 'string' || !key) {
         return key;
     }
@@ -189,7 +189,7 @@ export function canonicalizeKey(key) {
 /**
  * Returns legacy key variants that may still hold data for a canonical key.
  */
-export function getLegacyVariantsForCanonical(canonicalKey) {
+ function getLegacyVariantsForCanonical(canonicalKey) {
     const variants = [];
 
     for (const { pattern, toCanonical } of LEGACY_KEY_RESOLVERS) {
