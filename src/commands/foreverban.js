@@ -1,66 +1,63 @@
 import { SlashCommandBuilder, PermissionFlagsBits } from "discord.js";
+import db from "../../database/database.js"; // change this path if your database file is somewhere else
 
 export default {
-  data: new SlashCommandBuilder()
-    .setName("foreverban")
-    .setDescription("Permanently bans a user from the server.")
-    .addUserOption(option =>
-      option
-        .setName("user")
-        .setDescription("The user to permanently ban")
-        .setRequired(true)
-    )
-    .addStringOption(option =>
-      option
-        .setName("reason")
-        .setDescription("Reason for the forever ban")
-        .setRequired(false)
-    ),
+    data: new SlashCommandBuilder()
+        .setName("foreverban")
+        .setDescription("Permanently bans a user.")
+        .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers)
+        .addUserOption(option =>
+            option
+                .setName("user")
+                .setDescription("User to forever ban")
+                .setRequired(true)
+        )
+        .addStringOption(option =>
+            option
+                .setName("reason")
+                .setDescription("Reason for the ban")
+                .setRequired(false)
+        ),
 
-  async execute(interaction) {
-    const ownerIds = process.env.OWNER_IDS
-      ?.split(",")
-      .map(id => id.trim()) || [];
+    async execute(interaction) {
 
-    // Only bot owners can use foreverban
-    if (!ownerIds.includes(interaction.user.id)) {
-      return interaction.reply({
-        content: "❌ You do not have permission to use this command.",
-        ephemeral: true,
-      });
+        const user = interaction.options.getUser("user");
+        const reason = interaction.options.getString("reason") || "No reason provided";
+
+        try {
+
+            // Save forever ban to database
+            db.run(
+                `INSERT OR REPLACE INTO foreverbans (user_id, banned_by, reason)
+                 VALUES (?, ?, ?)`,
+                [
+                    user.id,
+                    interaction.user.id,
+                    reason
+                ]
+            );
+
+            // Ban user
+            await interaction.guild.members.ban(user.id, {
+                reason: `Forever ban: ${reason}`
+            });
+
+            await interaction.reply({
+                content:
+                    `✅ **${user.tag} has been forever banned.**\n` +
+                    `Reason: ${reason}\n` +
+                    `Banned by: ${interaction.user.tag}`
+            });
+
+        } catch (error) {
+
+            console.error(error);
+
+            await interaction.reply({
+                content: "❌ Failed to forever ban this user.",
+                ephemeral: true
+            });
+
+        }
     }
-
-    const user = interaction.options.getUser("user");
-    const reason =
-      interaction.options.getString("reason") ||
-      "No reason provided";
-
-    try {
-      // Ban the user from the server
-      await interaction.guild.members.ban(user.id, {
-        reason: `Forever Ban: ${reason}`,
-      });
-
-      await interaction.reply({
-        content:
-          `👍 User:**has been permanently banned.
-They will be re-banned automatically if ever unbanned.**\n\n` +
-          `Reason: ${reason}\n\n` +
-        ephemeral: true,
-      });
-
-      console.log(
-        `[FOREVER BAN] ${user.tag} (${user.id}) | Reason: ${reason}`
-      );
-
-    } catch (error) {
-      console.error("Forever ban error:", error);
-
-      await interaction.reply({
-        content:
-          "❌ I could not forever ban this user. Check my permissions.",
-        ephemeral: true,
-      });
-    }
-  },
 };
