@@ -1,8 +1,6 @@
-async prefixExecute(interaction) {
-    const args = interaction.options._positional;
-
-    if (args.length !== 2 || args[0].toLowerCase() !== "give") {
-        return interaction.reply({
+async prefixExecute(message, args) {
+    if (!args || args.length !== 2 || args[0].toLowerCase() !== "give") {
+        return message.reply({
             content: "Usage: `-vouch give @User`",
         });
     }
@@ -10,23 +8,23 @@ async prefixExecute(interaction) {
     const mention = args[1];
     const id = mention.replace(/[<@!>]/g, "");
 
-    const member = await interaction.guild.members.fetch(id).catch(() => null);
+    const member = await message.guild.members.fetch(id).catch(() => null);
 
     if (!member) {
-        return interaction.reply({
+        return message.reply({
             content: "❌ User not found.",
         });
     }
 
     if (member.roles.cache.has(VOUCH_ROLE_ID)) {
-        return interaction.reply({
+        return message.reply({
             content: "❌ This user already has the Vouch role.",
         });
     }
 
     await member.roles.add(VOUCH_ROLE_ID);
 
-    return interaction.reply({
+    return message.reply({
         embeds: [
             successEmbed(
                 "✅ Vouch Given",
