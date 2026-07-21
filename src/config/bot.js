@@ -153,34 +153,8 @@ export const botConfig = {
       icon: null,
       url: null,
     },
-    
-  },
-    // =========================
-// FOREVER BAN SYSTEM
-// =========================
-foreverBan: {
-  // If enabled, users permanently banned cannot be removed
-  // with normal Discord unban commands.
-  enabled: true,
 
-  // Roles/users allowed to use foreverban commands.
-  ownersOnly: true,
-
-  // Channel for logging forever bans.
-  logChannel: null,
-
-  // Message shown when someone is forever banned.
-  banMessage:
-    "You have been permanently banned from this server.",
-
-  // Commands:
-  // /foreverban user reason
-  // /unforeverban user
-  commands: {
-    foreverBan: true,
-    unForeverBan: true,
-  },
-
+  
   // Stores users who are permanently banned.
   // This will normally be stored in your database.
   bannedUsers: [],
