@@ -253,7 +253,11 @@ function getForeverBanKey(userId) {
     return `foreverban:${userId}`;
 }
 
-export {
+function getForeverBanKey(userId) {
+    return `foreverban:${userId}`;
+}
+
+module.exports = {
     getGuildConfigKey,
     getWarningsKey,
     getForeverBanKey
