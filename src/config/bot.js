@@ -131,20 +131,20 @@ export const botConfig = {
       moderation: "#9B59B6",
 
       // Ticket priority color mapping.
-      priority: {
-        none: "#95A5A6",
-        low: "#3498db",
-        medium: "#2ecc71",
-        high: "#f1c40f",
-        urgent: "#e74c3c",
-         author: {
+    priority: {
+  none: "#95A5A6",
+  low: "#3498db",
+  medium: "#2ecc71",
+  high: "#f1c40f",
+  urgent: "#e74c3c",
+},
+
       // Optional default embed author block.
       name: null,
       icon: null,
       url: null,
     },
-  },
-
+  
   // =========================
   // FOREVER BAN SYSTEM
   // =========================
