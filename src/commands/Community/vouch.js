@@ -2,7 +2,7 @@ import { SlashCommandBuilder, PermissionFlagsBits } from 'discord.js';
 import { successEmbed } from '../../utils/embeds.js';
 import { InteractionHelper } from '../../utils/interactionHelper.js';
 
-const VOUCH_ROLE_ID = "PUT_ROLE_ID_HERE";
+const VOUCH_ROLE_ID = "1529257093234692096";
 
 export default {
     data: new SlashCommandBuilder()
