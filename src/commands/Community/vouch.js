@@ -18,11 +18,11 @@ export default {
 
     category: "community",
 
-    // Prefix command: -vouch user @User
+    // PREFIX: -vouch user @User
     async prefixExecute(interaction) {
         const args = interaction.options._positional;
 
-        if (args.length < 2 || args[0].toLowerCase() !== "user") {
+        if (args.length !== 2 || args[0].toLowerCase() !== "user") {
             return interaction.reply({
                 content: "Usage: `-vouch user @User`",
             });
@@ -41,7 +41,7 @@ export default {
 
         if (member.roles.cache.has(VOUCH_ROLE_ID)) {
             return interaction.reply({
-                content: "❌ This user already has the Vouch role.",
+                content: "❌ This user already has the vouch role.",
             });
         }
 
@@ -51,28 +51,20 @@ export default {
             embeds: [
                 successEmbed(
                     "✅ Vouch Given",
-                    `${member.user.tag} has been given the Vouch role!`
+                    `${member.user.tag} has been given the vouch role!`
                 ),
             ],
         });
     },
 
-    // Slash command: /vouch user:@User
+    // SLASH: /vouch user:@User
     async execute(interaction) {
         const user = interaction.options.getUser("user");
-
-        if (!user) {
-            return InteractionHelper.universalReply(interaction, {
-                content: "❌ User not found.",
-                ephemeral: true,
-            });
-        }
-
         const member = await interaction.guild.members.fetch(user.id);
 
         if (member.roles.cache.has(VOUCH_ROLE_ID)) {
             return InteractionHelper.universalReply(interaction, {
-                content: "❌ This user already has the Vouch role.",
+                content: "❌ This user already has the vouch role.",
                 ephemeral: true,
             });
         }
@@ -83,7 +75,7 @@ export default {
             embeds: [
                 successEmbed(
                     "✅ Vouch Given",
-                    `${user.tag} has been given the Vouch role!`
+                    `${user.tag} has been given the vouch role!`
                 ),
             ],
         });
