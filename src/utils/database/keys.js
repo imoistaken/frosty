@@ -3,9 +3,16 @@
  * All storage keys should be built through these helpers.
  */
 
+export function getGuildConfigKey(guildId) {
+    return `guild:${guildId}:config`;
+}
+
 export const getGuildBirthdaysKey = (guildId) => `guild:${guildId}:config`;
+
 export const getBirthdayLeftBackupKey = (guildId) => `guild:${guildId}:birthdays`;
+
 export const getBirthdayTrackingKey = (guildId) => `guild:${guildId}:birthdays:left`;
+
 
 export function getTicketKey(guildId, channelId) {
     return `guild:${guildId}:ticket:${channelId}`;
@@ -168,10 +175,10 @@ export function getLegacyVariantsForCanonical(canonicalKey) {
         variants.push(`economy:${economy[1]}:${economy[2]}`);
     }
 
-    const birthday = canonicalKey.match(/^guild:([^:]+):birthdays$/);
+    const birthdays = canonicalKey.match(/^guild:([^:]+):config$/);
 
-    if (birthday) {
-        variants.push(`birthdays:${birthday[1]}`);
+    if (birthdays) {
+        variants.push(`birthdays:${birthdays[1]}`);
     }
 
     return variants;
