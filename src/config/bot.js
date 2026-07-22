@@ -481,17 +481,17 @@ export function validateConfig(config) {
   const errors = [];
 
   if (true) {
-   logger.error("=== ENVIRONMENT CHECK ===");
-logger.error("DISCORD_TOKEN:", !!process.env.DISCORD_TOKEN);
-logger.error("TOKEN:", !!process.env.TOKEN);
-logger.error("CLIENT_ID:", !!process.env.CLIENT_ID);
-logger.error("GUILD_ID:", !!process.env.GUILD_ID);
-logger.error("DATABASE_URL:", !!process.env.DATABASE_URL);
-logger.error("POSTGRES_URL:", !!process.env.POSTGRES_URL);
-logger.error("POSTGRES_HOST:", !!process.env.POSTGRES_HOST);
-logger.error("POSTGRES_USER:", !!process.env.POSTGRES_USER);
-logger.error("POSTGRES_PASSWORD:", !!process.env.POSTGRES_PASSWORD);
-logger.error("NODE_ENV:", process.env.NODE_ENV);
+logger.error("=== ENVIRONMENT CHECK ===");
+logger.error(`DISCORD_TOKEN: ${!!process.env.DISCORD_TOKEN}`);
+logger.error(`TOKEN: ${!!process.env.TOKEN}`);
+logger.error(`CLIENT_ID: ${!!process.env.CLIENT_ID}`);
+logger.error(`GUILD_ID: ${!!process.env.GUILD_ID}`);
+logger.error(`DATABASE_URL: ${!!process.env.DATABASE_URL}`);
+logger.error(`POSTGRES_URL: ${!!process.env.POSTGRES_URL}`);
+logger.error(`POSTGRES_HOST: ${!!process.env.POSTGRES_HOST}`);
+logger.error(`POSTGRES_USER: ${!!process.env.POSTGRES_USER}`);
+logger.error(`POSTGRES_PASSWORD: ${!!process.env.POSTGRES_PASSWORD}`);
+logger.error(`NODE_ENV: ${process.env.NODE_ENV}`);
   }
 
   if (!process.env.DISCORD_TOKEN && !process.env.TOKEN) {
