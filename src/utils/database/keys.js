@@ -6,7 +6,6 @@
 export const getGuildBirthdaysKey = (guildId) => `guild:${guildId}:config`;
 export const getBirthdayLeftBackupKey = (guildId) => `guild:${guildId}:birthdays`;
 export const getBirthdayTrackingKey = (guildId) => `guild:${guildId}:birthdays:left`;
-export const LEGACY_KEY_RESOLVERS = (guildId) => `guild:${guildId}:birthdays:tracking`;
 
  function getTicketKey(guildId, channelId) {
     return `guild:${guildId}:ticket:${channelId}`;
@@ -253,14 +252,8 @@ function getForeverBanKey(userId) {
     return `foreverban:${userId}`;
 }
 
-function getForeverBanKey(userId) {
-    return `foreverban:${userId}`;
-}
 
-module.exports = {
-    getGuildConfigKey,
-    getWarningsKey,
-    getForeverBanKey
+  
 };
 module.exports = {
     getGuildConfigKey,
