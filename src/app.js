@@ -58,9 +58,6 @@ const dbInstance = await initializeDatabase();
 this.db = dbInstance;
 this.database = dbInstance;
 
-// Check database status and report
-const dbStatus = this.db.getStatus();
-
       // Check database status and report
       const dbStatus = this.db.getStatus();
       if (dbStatus.isDegraded) {
