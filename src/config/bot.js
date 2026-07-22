@@ -480,7 +480,7 @@ export const botConfig = {
 export function validateConfig(config) {
   const errors = [];
 
-  if (process.env.NODE_ENV !== 'production') {
+  if (true) {
    logger.error("=== ENVIRONMENT CHECK ===");
 logger.error("DISCORD_TOKEN:", !!process.env.DISCORD_TOKEN);
 logger.error("TOKEN:", !!process.env.TOKEN);
