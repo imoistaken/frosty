@@ -188,3 +188,12 @@ export function getLegacyVariantsForCanonical(canonicalKey) {
 export function getForeverBanKey(userId) {
     return `foreverban:${userId}`;
 }
+
+
+export function getVouchKey(userId) {
+    return `vouches:${userId}`;
+}
+
+export function getVouchConfigKey(guildId) {
+    return `guild:${guildId}:vouch:config`;
+}
