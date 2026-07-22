@@ -3,7 +3,7 @@
   "version": "2.1.0",
   "description": "Modular Ultimate Community Bot by Touchpoint Support",
   "main": "src/app.js",
-  "type": "module",
+  "type": "bot",
   "scripts": {
     "start": "node src/app.js",
     "migrate": "node scripts/migrate.js apply",
