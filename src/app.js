@@ -55,7 +55,8 @@ class TitanBot extends Client {
       
       startupLog('Initializing database...');
       const dbInstance = await initializeDatabase();
-      this.db = dbInstance.db;
+      this.db = null;
+      this.database = null;
 
       // Check database status and report
       const dbStatus = this.db.getStatus();
