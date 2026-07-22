@@ -1,17 +1,7 @@
 import {
     canonicalizeKey,
-    getEconomyPrefix,
-    getUserLevelPrefix,
-    getWarningsPrefix,
-    getReactionRolesPrefix,
-    getApplicationsPrefix,
-    getTicketCounterKey,
-    getServerCountersKey,
-    getGuildConfigKey,
-    getGuildBirthdaysKey,
-    getWelcomeConfigKey,
-    getLevelingKey,
-} from './keys.js';
+    getLegacyVariantsForCanonical
+} from "./keys.js";
 
 const TEMP_BACKED_TYPES = new Set([
     'warnings',
