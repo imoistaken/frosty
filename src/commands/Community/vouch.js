@@ -1,3 +1,4 @@
+import { SlashCommandBuilder, PermissionFlagsBits } from "discord.js";
 import {
     getVouchKey,
     getVouchConfigKey
@@ -6,49 +7,106 @@ import {
 
 export default {
 
-    name: "vouch",
-    description: "Vouch system",
+    data: new SlashCommandBuilder()
+        .setName("vouch")
+        .setDescription("Vouch system")
 
-    async execute(message, args, client) {
+        .addSubcommand(sub =>
+            sub
+                .setName("give")
+                .setDescription("Give someone a vouch")
+                .addUserOption(option =>
+                    option
+                        .setName("user")
+                        .setDescription("User to vouch")
+                        .setRequired(true)
+                )
+        )
 
-        const db = client.database;
+        .addSubcommand(sub =>
+            sub
+                .setName("take")
+                .setDescription("Remove your vouch")
+                .addUserOption(option =>
+                    option
+                        .setName("user")
+                        .setDescription("User to remove vouch from")
+                        .setRequired(true)
+                )
+        )
+
+        .addSubcommand(sub =>
+            sub
+                .setName("list")
+                .setDescription("View vouches")
+        )
+
+        .addSubcommand(sub =>
+            sub
+                .setName("role")
+                .setDescription("Manage vouch role")
+                .addStringOption(option =>
+                    option
+                        .setName("action")
+                        .setDescription("set or delete")
+                        .setRequired(true)
+                        .addChoices(
+                            {
+                                name:"Set",
+                                value:"set"
+                            },
+                            {
+                                name:"Delete",
+                                value:"delete"
+                            }
+                        )
+                )
+                .addRoleOption(option =>
+                    option
+                        .setName("role")
+                        .setDescription("Role to give for vouches")
+                        .setRequired(false)
+                )
+        ),
 
 
-        if (!args[0]) {
-            return message.reply(
-                "Usage: `-vouch give @user`, `-vouch take @user`, `-vouch list`"
-            );
-        }
+    async execute(interaction) {
 
 
-        const action = args[0].toLowerCase();
+        const db = interaction.client.database;
+
+        const sub =
+            interaction.options.getSubcommand();
 
 
-        // GIVE VOUCH
-        if (action === "give") {
 
-            const user = message.mentions.users.first();
+        if(sub === "give") {
 
-            if (!user)
-                return message.reply("Mention someone to vouch.");
+            const user =
+                interaction.options.getUser("user");
 
 
             let data =
                 await db.get(getVouchKey(user.id))
-                || {
+                ||
+                {
                     count:0,
                     users:[]
                 };
 
 
-            if(data.users.includes(message.author.id))
-                return message.reply(
-                    "You already vouched this person."
-                );
+            if(data.users.includes(interaction.user.id)) {
+
+                return interaction.reply({
+                    content:"❌ You already vouched this user.",
+                    ephemeral:true
+                });
+
+            }
 
 
             data.count++;
-            data.users.push(message.author.id);
+            data.users.push(interaction.user.id);
 
 
             await db.set(
@@ -57,41 +115,42 @@ export default {
             );
 
 
-            message.reply(
-                `✅ ${message.author} vouched ${user}`
+            return interaction.reply(
+                `✅ ${interaction.user} vouched ${user}`
             );
 
         }
 
 
 
-        // TAKE VOUCH
-        if(action === "take") {
 
-            const user = message.mentions.users.first();
+        if(sub === "take") {
 
-            if(!user)
-                return message.reply(
-                    "Mention someone."
-                );
+            const user =
+                interaction.options.getUser("user");
 
 
             let data =
-            await db.get(getVouchKey(user.id));
+                await db.get(getVouchKey(user.id));
 
 
-            if(!data)
-                return message.reply(
-                    "That user has no vouches."
+            if(!data) {
+
+                return interaction.reply({
+                    content:"❌ This user has no vouches.",
+                    ephemeral:true
+                });
+
+            }
+
+
+            data.users =
+                data.users.filter(
+                    id => id !== interaction.user.id
                 );
 
 
-            data.count--;
-
-            data.users =
-            data.users.filter(
-                id => id !== message.author.id
-            );
+            data.count = data.users.length;
 
 
             await db.set(
@@ -100,7 +159,7 @@ export default {
             );
 
 
-            message.reply(
+            return interaction.reply(
                 `❌ Removed your vouch from ${user}`
             );
 
@@ -109,33 +168,34 @@ export default {
 
 
 
-        // LIST
-        if(action === "list") {
+        if(sub === "list") {
 
 
             const config =
-            await db.get(
-                getVouchConfigKey(message.guild.id)
-            );
+                await db.get(
+                    getVouchConfigKey(
+                        interaction.guild.id
+                    )
+                );
 
 
             const role =
-            config?.role
-            ?
-            `<@&${config.role}>`
-            :
-            "Not set";
+                config?.role
+                ?
+                `<@&${config.role}>`
+                :
+                "Not set";
 
 
-            message.channel.send(
+            return interaction.reply(
 `
-**Vouch System**
+**⭐ Vouch System**
 
-⭐ Vouch Role: ${role}
+Vouch Role: ${role}
 
 Use:
-\`-vouch give @user\`
-\`-vouch take @user\`
+\`/vouch give\`
+\`/vouch take\`
 `
             );
 
@@ -143,41 +203,53 @@ Use:
 
 
 
-        // ROLE SET / DELETE
 
-        if(action === "role") {
-
-
-            if(!message.member.permissions.has("Administrator"))
-                return message.reply(
-                    "Admin only."
-                );
+        if(sub === "role") {
 
 
-            const option=args[1];
+            if(
+                !interaction.member.permissions.has(
+                    PermissionFlagsBits.Administrator
+                )
+            ) {
+
+                return interaction.reply({
+                    content:"❌ Admin only.",
+                    ephemeral:true
+                });
+
+            }
 
 
-            if(option==="set") {
+            const action =
+                interaction.options.getString("action");
+
+
+
+            if(action === "set") {
 
                 const role =
-                message.mentions.roles.first();
+                    interaction.options.getRole("role");
 
 
                 if(!role)
-                    return message.reply(
-                        "Mention a role."
-                    );
+                    return interaction.reply({
+                        content:"Mention a role.",
+                        ephemeral:true
+                    });
 
 
                 await db.set(
-                    getVouchConfigKey(message.guild.id),
+                    getVouchConfigKey(
+                        interaction.guild.id
+                    ),
                     {
                         role:role.id
                     }
                 );
 
 
-                message.reply(
+                return interaction.reply(
                     `✅ Vouch role set to ${role}`
                 );
 
@@ -185,14 +257,17 @@ Use:
 
 
 
-            if(option==="delete") {
+            if(action === "delete") {
+
 
                 await db.delete(
-                    getVouchConfigKey(message.guild.id)
+                    getVouchConfigKey(
+                        interaction.guild.id
+                    )
                 );
 
 
-                message.reply(
+                return interaction.reply(
                     "✅ Vouch role deleted."
                 );
 
